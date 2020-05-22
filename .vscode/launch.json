@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-Application<HelloWorld-Java>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.intuit.developer.helloworld.Application",
+            "projectName": "HelloWorld-Java",
+            "args": ""
+        }
+    ]
+}

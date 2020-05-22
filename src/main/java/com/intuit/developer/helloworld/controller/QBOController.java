@@ -30,30 +30,18 @@ import com.intuit.ipp.services.QueryResult;
 import com.intuit.oauth2.client.OAuth2PlatformClient;
 import com.intuit.oauth2.data.BearerTokenResponse;
 import com.intuit.oauth2.exception.OAuthException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intuit.ipp.core.IEntity;
 import com.intuit.ipp.data.Account;
 import com.intuit.ipp.data.AccountTypeEnum;
 import com.intuit.ipp.data.Customer;
 import com.intuit.ipp.data.EmailAddress;
-import com.intuit.ipp.data.Error;
 import com.intuit.ipp.data.IntuitEntity;
-import com.intuit.ipp.data.Invoice;
 import com.intuit.ipp.data.Item;
 import com.intuit.ipp.data.ItemTypeEnum;
 import com.intuit.ipp.data.Line;
 import com.intuit.ipp.data.LineDetailTypeEnum;
-import com.intuit.ipp.data.LinkedTxn;
-import com.intuit.ipp.data.Payment;
 import com.intuit.ipp.data.ReferenceType;
 import com.intuit.ipp.data.SalesItemLineDetail;
-import com.intuit.ipp.data.TxnTypeEnum;
-import com.intuit.ipp.exception.FMSException;
-import com.intuit.ipp.exception.InvalidTokenException;
-import com.intuit.ipp.services.DataService;
-import com.intuit.ipp.services.QueryResult;
-
 
 /**
  * @author dderose
