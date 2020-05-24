@@ -38,7 +38,7 @@ public class SlackController {
                     .put("response", "No realm ID.  QBO calls only work if the accounting scope was passed!")
                     .toString();
         }
-        final String accessToken = (String) session.getAttribute("access_token");
+        final String accessToken = "eyJlbmMiOiJBMTI4Q0JDLUhTMjU2IiwiYWxnIjoiZGlyIn0..zHnETbIdYStTKbtNE1BY-w.lC4aVFGnUlRIf5y1hpZaAxFy_h07iHh0MZD7oAnpHFZQ36JYfrC7ELN7c5B6KhL6aZQ0OqmAeCqi3pic7KWX4jdKJw_V3htR5SwIfTZ9FRY8RIbMMUkD-z8xFD2g0o5duKk2CsMT2AgkUEpwoO4lOOBWGRv9PYEh0lQ4giOGRaMVlN_gRxsqCVNVDf0ZGtzv2AV_mSrUzmWM61Vj5UPppNKwdyttNrvyR3r7UtZQaU27WtxNmq-JenAHLPAyqLNSu3CVxYAJnQksh-0K0kCVj1-D5BXB-EpmmfxYXE8PC6rWQ34gcLAZi_CVpqlTq99KZF05h7AYzntvwZ7H5pQUB2NvChG5CIIrnQd_u5_uwsFmXKFt6evW9aTPLlomthZeENRTPYn9JMMm2a-VdxN01jLVggHv4MaVgz5gz6dF8fPlPCE3Ih9BtxeoqVs1PYHIlYGUEOrAFlsEdP4-Re1ykmTXa_YodidK6iHKyZQ7RzgZrHQU_AHmaDbFPGJJZUT-zAYlmFmKLu7361U-mbbJ-Ee5UPyNQeqp45FD1FsHJXSSsh1aFE5wet37S5QZBQLDh5lPeoFs4BtCoLK_BnQWNUEupbCM23K2lJIeJ19sg1Kn6eHJhFTcdAWPtBB_QLU9u0MbynsQtC1tvVvLqZ68lx3SolCRaR4FOvxo96dVMzI_CfRYU0PM5h70ZYrXsXJBDyt2PxrpmxiZwKtCKRwD_GpIjJLMdKgWnV4eTEF2Q_X1AmdNpqi8u2zr_oMjjP7aoZ8Ollv2LSQHVW64SdSaQGrfgE6e-qZN8kKdo8eQtM0Ay0TceKcSETxvk3RCfHbR7N1jKonYA1eXXhu2EibbgVOWr0NS6xTZPsv4XKJxGW2KBCGg9B8LkgaC4NjkexVmUZLEsRFR9FWVSWMDKRGy1g.0oiJezcjytpq4i520UKw4Q";
 
         try {
             // get DataService
