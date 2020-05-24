@@ -32,7 +32,7 @@ public class SlackController {
     @ResponseBody
     @PostMapping("/slack/events")
     public String slashCommandResponse(final HttpSession session, @RequestParam("text") final String text) {
-        final String realmId = (String) session.getAttribute("realmId");
+        final String realmId = "4620816365061552710";
         if (StringUtils.isEmpty(realmId)) {
             return new JSONObject()
                     .put("response", "No realm ID.  QBO calls only work if the accounting scope was passed!")
