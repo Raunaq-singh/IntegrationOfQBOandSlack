@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.intuit.developer.helloworld.classes.credentialsClass;
 import com.intuit.developer.helloworld.client.OAuth2PlatformClientFactory;
 import com.intuit.developer.helloworld.helper.QBOServiceHelper;
 import com.intuit.ipp.data.CompanyInfo;
@@ -53,6 +54,9 @@ public class QBOController {
 	@Autowired
 	OAuth2PlatformClientFactory factory;
 	
+	@Autowired
+	credentialsClass credentials;
+
 	@Autowired
     public QBOServiceHelper helper;
 
@@ -102,7 +106,8 @@ public class QBOController {
 					BearerTokenResponse bearerTokenResponse = client.refreshToken(refreshToken);
 					session.setAttribute("access_token", bearerTokenResponse.getAccessToken());
 		            session.setAttribute("refresh_token", bearerTokenResponse.getRefreshToken());
-		            
+					credentials.setAccessToken(bearerTokenResponse.getAccessToken());
+					credentials.setRefreshToken(bearerTokenResponse.getRefreshToken());
 		            //call company info again using new tokens
 		            logger.info("calling companyinfo using new tokens");
 		            DataService service = helper.getDataService(realmId, accessToken);

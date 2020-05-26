@@ -5,12 +5,18 @@ import javax.servlet.http.HttpSession;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.intuit.developer.helloworld.classes.credentialsClass;
+import com.intuit.developer.helloworld.client.OAuth2PlatformClientFactory;
 import com.intuit.developer.helloworld.helper.QBOServiceHelper;
 import com.intuit.ipp.data.Customer;
 import com.intuit.ipp.data.EmailAddress;
 import com.intuit.ipp.exception.FMSException;
 import com.intuit.ipp.exception.InvalidTokenException;
 import com.intuit.ipp.services.DataService;
+import com.intuit.oauth2.client.OAuth2PlatformClient;
+import com.intuit.oauth2.data.BearerTokenResponse;
+import com.intuit.oauth2.exception.OAuthException;
+
 import org.apache.log4j.Logger;
 import org.apache.commons.lang.StringUtils;
 
@@ -25,21 +31,30 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class SlackController {
     @Autowired
+    OAuth2PlatformClientFactory factory;
+    
+    @Autowired
     public QBOServiceHelper helper;
 
+    @Autowired
+    credentialsClass credentials;
+
+    final String realmId = credentials.getRealmID();
+    String accessToken = credentials.getAccessToken();
+    String refreshToken = credentials.getRefreshToken();
+    private static final String failureMsg = "Failed";
+
     private static final Logger logger = Logger.getLogger(QBOController.class);
-    
+
     @ResponseBody
     @PostMapping("/slack/events")
-    public String slashCommandResponse(final HttpSession session, @RequestParam("text") final String text) {
-        final String realmId = "4620816365061552710";
+    public String slashCommandResponse(@RequestParam("text") final String text,
+            @RequestParam("response-url") String responseURL) {
         if (StringUtils.isEmpty(realmId)) {
             return new JSONObject()
                     .put("response", "No realm ID.  QBO calls only work if the accounting scope was passed!")
                     .toString();
         }
-        final String accessToken = "eyJlbmMiOiJBMTI4Q0JDLUhTMjU2IiwiYWxnIjoiZGlyIn0..zHnETbIdYStTKbtNE1BY-w.lC4aVFGnUlRIf5y1hpZaAxFy_h07iHh0MZD7oAnpHFZQ36JYfrC7ELN7c5B6KhL6aZQ0OqmAeCqi3pic7KWX4jdKJw_V3htR5SwIfTZ9FRY8RIbMMUkD-z8xFD2g0o5duKk2CsMT2AgkUEpwoO4lOOBWGRv9PYEh0lQ4giOGRaMVlN_gRxsqCVNVDf0ZGtzv2AV_mSrUzmWM61Vj5UPppNKwdyttNrvyR3r7UtZQaU27WtxNmq-JenAHLPAyqLNSu3CVxYAJnQksh-0K0kCVj1-D5BXB-EpmmfxYXE8PC6rWQ34gcLAZi_CVpqlTq99KZF05h7AYzntvwZ7H5pQUB2NvChG5CIIrnQd_u5_uwsFmXKFt6evW9aTPLlomthZeENRTPYn9JMMm2a-VdxN01jLVggHv4MaVgz5gz6dF8fPlPCE3Ih9BtxeoqVs1PYHIlYGUEOrAFlsEdP4-Re1ykmTXa_YodidK6iHKyZQ7RzgZrHQU_AHmaDbFPGJJZUT-zAYlmFmKLu7361U-mbbJ-Ee5UPyNQeqp45FD1FsHJXSSsh1aFE5wet37S5QZBQLDh5lPeoFs4BtCoLK_BnQWNUEupbCM23K2lJIeJ19sg1Kn6eHJhFTcdAWPtBB_QLU9u0MbynsQtC1tvVvLqZ68lx3SolCRaR4FOvxo96dVMzI_CfRYU0PM5h70ZYrXsXJBDyt2PxrpmxiZwKtCKRwD_GpIjJLMdKgWnV4eTEF2Q_X1AmdNpqi8u2zr_oMjjP7aoZ8Ollv2LSQHVW64SdSaQGrfgE6e-qZN8kKdo8eQtM0Ay0TceKcSETxvk3RCfHbR7N1jKonYA1eXXhu2EibbgVOWr0NS6xTZPsv4XKJxGW2KBCGg9B8LkgaC4NjkexVmUZLEsRFR9FWVSWMDKRGy1g.0oiJezcjytpq4i520UKw4Q";
-
         try {
             // get DataService
             final DataService service = helper.getDataService(realmId, accessToken);
@@ -47,10 +62,36 @@ public class SlackController {
             // add customer
             final Customer customer = getCustomerWithAllFields();
             customer.setDisplayName(text);
-            final Customer savedCustomer = service.add(customer);       
+            final Customer savedCustomer = service.add(customer);
             return createResponse(savedCustomer);
         } catch (final InvalidTokenException e) {
-            return new JSONObject().put("response", "InvalidToken - Refreshtoken and try again").toString();
+            logger.error("Error while calling executeQuery :: " + e.getMessage());
+            // refresh tokens
+            logger.info("received 401 during companyinfo call, refreshing tokens now");
+            OAuth2PlatformClient client = factory.getOAuth2PlatformClient();
+
+            try {
+                BearerTokenResponse bearerTokenResponse = client.refreshToken(refreshToken);
+                credentials.setAccessToken(bearerTokenResponse.getAccessToken());
+                credentials.setRefreshToken(bearerTokenResponse.getRefreshToken());
+                accessToken = bearerTokenResponse.getAccessToken();
+                refreshToken = bearerTokenResponse.getRefreshToken();
+		        //call company info again using new tokens
+		        logger.info("calling companyinfo using new tokens");
+		        DataService service = helper.getDataService(realmId, accessToken);
+				
+				// get all companyinfo
+				final Customer customer = getCustomerWithAllFields();
+                customer.setDisplayName(text);
+                final Customer savedCustomer = service.add(customer);       
+                return createResponse(savedCustomer);
+			} catch (OAuthException e1) {
+				logger.error("Error while calling bearer token :: " + e.getMessage());
+				return new JSONObject().put("response",failureMsg).toString();
+			} catch (FMSException e1) {
+				logger.error("Error while calling company currency :: " + e.getMessage());
+				return new JSONObject().put("response",failureMsg).toString();
+			}
         } catch (final FMSException e) {
             final List<com.intuit.ipp.data.Error> list = e.getErrorList();
             list.forEach(error -> logger.error("Error while calling the API :: " + error.getMessage()));

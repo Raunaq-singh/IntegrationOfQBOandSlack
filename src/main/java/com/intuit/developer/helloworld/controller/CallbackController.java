@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.intuit.developer.helloworld.classes.credentialsClass;
 import com.intuit.developer.helloworld.client.OAuth2PlatformClientFactory;
 import com.intuit.oauth2.client.OAuth2PlatformClient;
 import com.intuit.oauth2.data.BearerTokenResponse;
@@ -21,7 +22,10 @@ import com.intuit.oauth2.exception.OAuthException;
 public class CallbackController {
     
 	@Autowired
-	OAuth2PlatformClientFactory factory;
+    OAuth2PlatformClientFactory factory;
+    
+    @Autowired
+    credentialsClass credentials;
 
     private static final Logger logger = Logger.getLogger(CallbackController.class);
     
@@ -45,7 +49,9 @@ public class CallbackController {
 	        if (csrfToken.equals(state)) {
 	            session.setAttribute("realmId", realmId);
 	            session.setAttribute("auth_code", authCode);
-	
+                
+                credentials.setRealmID(realmId);
+
 	            OAuth2PlatformClient client  = factory.getOAuth2PlatformClient();
 	            String redirectUri = factory.getPropertyValue("OAuth2AppRedirectUri");
 	            logger.info("inside oauth2redirect of sample -- redirectUri " + redirectUri  );
@@ -54,9 +60,10 @@ public class CallbackController {
 				 
 	            session.setAttribute("access_token", bearerTokenResponse.getAccessToken());
 	            session.setAttribute("refresh_token", bearerTokenResponse.getRefreshToken());
-	    
+                
+                credentials.setAccessToken(bearerTokenResponse.getAccessToken());
+                credentials.setRefreshToken(bearerTokenResponse.getRefreshToken());
 	            // Update your Data store here with user's AccessToken and RefreshToken along with the realmId
-
 	            return "connected";
 	        }
 	        logger.info("csrf token mismatch " );
