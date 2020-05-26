@@ -44,10 +44,7 @@ public class SlackController {
 
     @ResponseBody
     @PostMapping("/slack/events")
-    public String slashCommandResponse(@RequestParam("text") final String text, @RequestParam("response-url") String responseURL) {
-        
-        return responseURL;
-        
+    public String slashCommandResponse(@RequestParam("text") final String text, @RequestParam("response-url") String responseURL){
         if (StringUtils.isEmpty(credentials.getRealmID())) {
             return new JSONObject()
                     .put("response", "No realm ID.  QBO calls only work if the accounting scope was passed!")
