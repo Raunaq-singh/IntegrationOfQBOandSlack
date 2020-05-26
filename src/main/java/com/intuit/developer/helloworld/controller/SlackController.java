@@ -22,13 +22,15 @@ import com.intuit.oauth2.exception.OAuthException;
 
 import org.apache.log4j.Logger;
 import org.apache.commons.lang.StringUtils;
-
+import org.apache.http.impl.client.HttpClients;
 import org.apache.commons.lang.RandomStringUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,7 +52,8 @@ public class SlackController {
     private static final Logger logger = Logger.getLogger(SlackController.class);
     Gson gson;
     SlackResponse slackResponse = new SlackResponse("We're completing your request....", Arrays.asList(new SlackResponseAttachment("Wait here!")));
-    RestTemplate restTemplate = new RestTemplate();
+    ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(HttpClients.createDefault());
+    RestTemplate restTemplate = new RestTemplate(requestFactory);
 
     @ResponseBody
     @PostMapping("/slack/events")
