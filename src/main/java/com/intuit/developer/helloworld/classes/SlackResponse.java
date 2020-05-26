@@ -10,6 +10,16 @@ public class SlackResponse {
     @JsonProperty("text")
     private String text;
 
+    @JsonProperty("response_type")
+    private String responseType = "ephemeral";
+
+    @JsonProperty("replace_original")
+    private boolean replaceOriginal = true;
+
+    public SlackResponse(String text) {
+        this.text = text;
+    }
+
     public String getText() {
         return text;
     }
@@ -18,8 +28,19 @@ public class SlackResponse {
         this.text = text;
     }
 
-    public SlackResponse(String text) {
-        this.text = text;
+    public String getResponseType() {
+        return responseType;
     }
-    
+
+    public void setResponseType(String responseType) {
+        this.responseType = responseType;
+    }
+
+    public boolean isReplaceOriginal() {
+        return replaceOriginal;
+    }
+
+    public void setReplaceOriginal(boolean replaceOriginal) {
+        this.replaceOriginal = replaceOriginal;
+    }
 }

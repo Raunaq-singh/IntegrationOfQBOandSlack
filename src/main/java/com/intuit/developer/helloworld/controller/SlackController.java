@@ -80,11 +80,8 @@ public class SlackController {
                 BearerTokenResponse bearerTokenResponse = client.refreshToken(credentials.getRefreshToken());
                 credentials.setAccessToken(bearerTokenResponse.getAccessToken());
                 credentials.setRefreshToken(bearerTokenResponse.getRefreshToken());
-		        //call company info again using new tokens
-		        logger.info("calling companyinfo using new tokens");
 		        DataService service = helper.getDataService(credentials.getRealmID(), credentials.getAccessToken());
 				
-				// get all companyinfo
 				final Customer customer = getCustomerWithAllFields();
                 customer.setDisplayName(text);
                 final Customer savedCustomer = service.add(customer);       
