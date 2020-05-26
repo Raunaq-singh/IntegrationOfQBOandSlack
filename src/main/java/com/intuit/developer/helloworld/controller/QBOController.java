@@ -64,7 +64,6 @@ public class QBOController {
 	private static final Logger logger = Logger.getLogger(QBOController.class);
 	private static final String failureMsg="Failed";
 	
-	
 	/**
      * Sample QBO API call using OAuth2 tokens
      * 

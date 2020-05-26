@@ -1,7 +1,6 @@
 package com.intuit.developer.helloworld.controller;
 
 import java.util.List;
-import javax.servlet.http.HttpSession;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,29 +34,26 @@ public class SlackController {
     
     @Autowired
     public QBOServiceHelper helper;
-
+    
     @Autowired
     credentialsClass credentials;
 
-    final String realmId = credentials.getRealmID();
-    String accessToken = credentials.getAccessToken();
-    String refreshToken = credentials.getRefreshToken();
     private static final String failureMsg = "Failed";
 
-    private static final Logger logger = Logger.getLogger(QBOController.class);
+    private static final Logger logger = Logger.getLogger(SlackController.class);
 
     @ResponseBody
     @PostMapping("/slack/events")
     public String slashCommandResponse(@RequestParam("text") final String text,
             @RequestParam("response-url") String responseURL) {
-        if (StringUtils.isEmpty(realmId)) {
+        if (StringUtils.isEmpty(credentials.getRealmID())) {
             return new JSONObject()
                     .put("response", "No realm ID.  QBO calls only work if the accounting scope was passed!")
                     .toString();
         }
         try {
             // get DataService
-            final DataService service = helper.getDataService(realmId, accessToken);
+            final DataService service = helper.getDataService(credentials.getRealmID(), credentials.getAccessToken());
 
             // add customer
             final Customer customer = getCustomerWithAllFields();
@@ -71,14 +67,12 @@ public class SlackController {
             OAuth2PlatformClient client = factory.getOAuth2PlatformClient();
 
             try {
-                BearerTokenResponse bearerTokenResponse = client.refreshToken(refreshToken);
+                BearerTokenResponse bearerTokenResponse = client.refreshToken(credentials.getRefreshToken());
                 credentials.setAccessToken(bearerTokenResponse.getAccessToken());
                 credentials.setRefreshToken(bearerTokenResponse.getRefreshToken());
-                accessToken = bearerTokenResponse.getAccessToken();
-                refreshToken = bearerTokenResponse.getRefreshToken();
 		        //call company info again using new tokens
 		        logger.info("calling companyinfo using new tokens");
-		        DataService service = helper.getDataService(realmId, accessToken);
+		        DataService service = helper.getDataService(credentials.getRealmID(), credentials.getAccessToken());
 				
 				// get all companyinfo
 				final Customer customer = getCustomerWithAllFields();
@@ -127,5 +121,5 @@ public class SlackController {
 	private String createErrorResponse(Exception e) {
 		logger.error("Exception while calling QBO ", e);
 		return new JSONObject().put("response","Failed").toString();
-	}
+    }
 }
