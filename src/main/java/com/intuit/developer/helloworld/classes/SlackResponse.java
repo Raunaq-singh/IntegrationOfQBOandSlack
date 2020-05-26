@@ -1,7 +1,14 @@
 package com.intuit.developer.helloworld.classes;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SlackResponse {
-    String text;
+    @JsonProperty("text")
+    private String text;
 
     public String getText() {
         return text;
