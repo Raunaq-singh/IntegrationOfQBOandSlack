@@ -26,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
 @Controller
 public class SlackController {
@@ -39,20 +40,21 @@ public class SlackController {
     credentialsClass credentials;
 
     private static final String failureMsg = "Failed";
-
     private static final Logger logger = Logger.getLogger(SlackController.class);
+    String waitingMessageForBot = "We're completing your request....";
+    RestTemplate restTemplate = new RestTemplate();
 
     @ResponseBody
     @PostMapping("/slack/events")
     public String slashCommandResponse(@RequestParam("text") final String text, @RequestParam("response_url") String responseURL){
         //System.out.println(text);
-        //System.out.println(responseURL);
-        
+        //System.out.println(responseURL);  
         if (StringUtils.isEmpty(credentials.getRealmID())) {
             return new JSONObject()
                     .put("response", "No realm ID.  QBO calls only work if the accounting scope was passed!")
                     .toString();
         }
+        restTemplate.postForObject(responseURL, waitingMessageForBot, waitingMessageForBot.getClass());
         try {
             // get DataService
             final DataService service = helper.getDataService(credentials.getRealmID(), credentials.getAccessToken());
