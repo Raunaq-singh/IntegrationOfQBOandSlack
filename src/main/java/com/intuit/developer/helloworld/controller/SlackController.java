@@ -44,9 +44,9 @@ public class SlackController {
 
     @ResponseBody
     @PostMapping("/slack/events")
-    public String slashCommandResponse(@RequestParam("text") final String text, @RequestParam("response-url") String responseURL){
-        System.out.println(text);
-        System.out.println(responseURL);
+    public String slashCommandResponse(@RequestParam("text") final String text, @RequestParam("response_url") String responseURL){
+        //System.out.println(text);
+        //System.out.println(responseURL);
         
         if (StringUtils.isEmpty(credentials.getRealmID())) {
             return new JSONObject()
