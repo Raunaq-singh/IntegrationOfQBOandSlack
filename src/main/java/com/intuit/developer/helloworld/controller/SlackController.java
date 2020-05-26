@@ -63,6 +63,8 @@ public class SlackController {
                     .toString();
         }
         restTemplate.postForObject(responseURL, new HttpEntity<>(gson.toJson(slackResponse), getHeaders()), slackResponse.getClass());
+        return "Checking";
+        /*
         try {
             // get DataService
             final DataService service = helper.getDataService(credentials.getRealmID(), credentials.getAccessToken());
@@ -100,6 +102,7 @@ public class SlackController {
             list.forEach(error -> logger.error("Error while calling the API :: " + error.getMessage()));
             return new JSONObject().put("response", "Failed").toString();
         }
+        */
     }
 
     private Customer getCustomerWithAllFields() {
