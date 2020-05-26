@@ -24,6 +24,8 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -127,6 +129,12 @@ public class SlackController {
 
 	private String createErrorResponse(Exception e) {
 		logger.error("Exception while calling QBO ", e);
-		return new JSONObject().put("response","Failed").toString();
+        return new JSONObject().put("response","Failed").toString();
+    }
+    
+    HttpHeaders getHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return headers;
     }
 }
