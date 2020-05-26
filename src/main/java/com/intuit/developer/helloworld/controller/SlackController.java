@@ -1,11 +1,13 @@
 package com.intuit.developer.helloworld.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.intuit.developer.helloworld.classes.SlackResponse;
+import com.intuit.developer.helloworld.classes.SlackResponseAttachment;
 import com.intuit.developer.helloworld.classes.credentialsClass;
 import com.intuit.developer.helloworld.client.OAuth2PlatformClientFactory;
 import com.intuit.developer.helloworld.helper.QBOServiceHelper;
@@ -47,7 +49,7 @@ public class SlackController {
     private static final String failureMsg = "Failed";
     private static final Logger logger = Logger.getLogger(SlackController.class);
     Gson gson;
-    SlackResponse slackResponse = new SlackResponse("We're completing your request....");
+    SlackResponse slackResponse = new SlackResponse("We're completing your request....", Arrays.asList(new SlackResponseAttachment("Wait here!")));
     RestTemplate restTemplate = new RestTemplate();
 
     @ResponseBody

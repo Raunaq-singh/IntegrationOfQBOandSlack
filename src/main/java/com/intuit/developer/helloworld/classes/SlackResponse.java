@@ -1,5 +1,7 @@
 package com.intuit.developer.helloworld.classes;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,9 +17,13 @@ public class SlackResponse {
 
     @JsonProperty("replace_original")
     private boolean replaceOriginal = true;
+    
+    @JsonProperty("attachments")
+    private List<SlackResponseAttachment> attachments;
 
-    public SlackResponse(String text) {
+    public SlackResponse(String text, List<SlackResponseAttachment> attachments) {
         this.text = text;
+        this.attachments = attachments;
     }
 
     public String getText() {
@@ -42,5 +48,13 @@ public class SlackResponse {
 
     public void setReplaceOriginal(boolean replaceOriginal) {
         this.replaceOriginal = replaceOriginal;
+    }
+
+    public List<SlackResponseAttachment> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<SlackResponseAttachment> attachments) {
+        this.attachments = attachments;
     }
 }
