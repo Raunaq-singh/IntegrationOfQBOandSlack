@@ -60,6 +60,8 @@ public class SlackController {
     public String slashCommandResponse(@RequestParam("text") String text, @RequestParam("response_url") String responseURL){
         //System.out.println(text);
         //System.out.println(responseURL);
+        logger.info("+++++++++" + text);
+        logger.info("+++++++++" + responseURL);
         if (StringUtils.isEmpty(credentials.getRealmID())) {
             return new JSONObject()
                     .put("response", "No realm ID.  QBO calls only work if the accounting scope was passed!")
