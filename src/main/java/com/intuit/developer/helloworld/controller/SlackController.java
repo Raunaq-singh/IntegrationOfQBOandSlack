@@ -54,7 +54,7 @@ public class SlackController {
 
     @ResponseBody
     @PostMapping("/slack/events")
-    public String slashCommandResponse(@RequestParam("text") final String text, @RequestParam("response_url") String responseURL){
+    public String slashCommandResponse(@RequestParam("text") String text, @RequestParam("response_url") String responseURL){
         //System.out.println(text);
         //System.out.println(responseURL);
         if (StringUtils.isEmpty(credentials.getRealmID())) {
@@ -62,8 +62,8 @@ public class SlackController {
                     .put("response", "No realm ID.  QBO calls only work if the accounting scope was passed!")
                     .toString();
         }
-        return restTemplate.postForEntity(responseURL, new HttpEntity<>(slackResponse, getHeaders()), slackResponse.getClass()).toString();
-        //return "Checking";
+        restTemplate.postForEntity(responseURL, new HttpEntity<>(slackResponse, getHeaders()), slackResponse.getClass()).toString();
+        return "Checking";
         /*
         try {
             // get DataService
