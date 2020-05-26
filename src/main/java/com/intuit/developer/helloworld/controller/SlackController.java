@@ -65,7 +65,10 @@ public class SlackController {
                     .put("response", "No realm ID.  QBO calls only work if the accounting scope was passed!")
                     .toString();
         }
-        restTemplate.postForEntity(responseURL, new HttpEntity<>(slackResponse, getHeaders()), slackResponse.getClass()).toString();
+        logger.info("+++++++++" + text);
+        logger.info("+++++++++" + responseURL);
+        restTemplate.postForEntity(responseURL, new HttpEntity<>(slackResponse, getHeaders()), slackResponse.getClass());
+        logger.info("+++++++++ REACHED HERE");
         return "Checking";
         /*
         try {
