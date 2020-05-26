@@ -56,7 +56,7 @@ public class SlackController {
     RestTemplate restTemplate = new RestTemplate(requestFactory);
 
     @ResponseBody
-    @PostMapping("/slack/events")
+    @PostMapping(value = "/slack/events", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String slashCommandResponse(@RequestParam("text") String text, @RequestParam("response_url") String responseURL){
         //System.out.println(text);
         //System.out.println(responseURL);
