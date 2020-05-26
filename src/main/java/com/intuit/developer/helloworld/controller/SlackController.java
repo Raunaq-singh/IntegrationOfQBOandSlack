@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.intuit.developer.helloworld.classes.SlackResponse;
 import com.intuit.developer.helloworld.classes.credentialsClass;
 import com.intuit.developer.helloworld.client.OAuth2PlatformClientFactory;
 import com.intuit.developer.helloworld.helper.QBOServiceHelper;
@@ -46,7 +47,7 @@ public class SlackController {
     private static final String failureMsg = "Failed";
     private static final Logger logger = Logger.getLogger(SlackController.class);
     Gson gson;
-    String waitingMessageForBot = "We're completing your request....";
+    SlackResponse slackResponse = new SlackResponse("We're completing your request....");
     RestTemplate restTemplate = new RestTemplate();
 
     @ResponseBody
@@ -54,14 +55,12 @@ public class SlackController {
     public String slashCommandResponse(@RequestParam("text") final String text, @RequestParam("response_url") String responseURL){
         //System.out.println(text);
         //System.out.println(responseURL);
-        return responseURL;
-        /*
         if (StringUtils.isEmpty(credentials.getRealmID())) {
             return new JSONObject()
                     .put("response", "No realm ID.  QBO calls only work if the accounting scope was passed!")
                     .toString();
         }
-        restTemplate.postForObject(responseURL, waitingMessageForBot, waitingMessageForBot.getClass());
+        restTemplate.postForObject(responseURL, new HttpEntity<>(gson.toJson(slackResponse), getHeaders()), slackResponse.getClass());
         try {
             // get DataService
             final DataService service = helper.getDataService(credentials.getRealmID(), credentials.getAccessToken());
@@ -102,7 +101,6 @@ public class SlackController {
             list.forEach(error -> logger.error("Error while calling the API :: " + error.getMessage()));
             return new JSONObject().put("response", "Failed").toString();
         }
-        */
     }
 
     private Customer getCustomerWithAllFields() {
