@@ -53,13 +53,15 @@ public class SlackController {
     @PostMapping("/slack/events")
     public String slashCommandResponse(@RequestParam("text") final String text, @RequestParam("response_url") String responseURL){
         //System.out.println(text);
-        //System.out.println(responseURL);  
+        //System.out.println(responseURL);
+        return responseURL;
+        /*
         if (StringUtils.isEmpty(credentials.getRealmID())) {
             return new JSONObject()
                     .put("response", "No realm ID.  QBO calls only work if the accounting scope was passed!")
                     .toString();
         }
-        restTemplate.postForObject(responseURL, new HttpEntity<>(waitingMessageForBot, getHeaders()), waitingMessageForBot.getClass());
+        restTemplate.postForObject(responseURL, waitingMessageForBot, waitingMessageForBot.getClass());
         try {
             // get DataService
             final DataService service = helper.getDataService(credentials.getRealmID(), credentials.getAccessToken());
@@ -100,6 +102,7 @@ public class SlackController {
             list.forEach(error -> logger.error("Error while calling the API :: " + error.getMessage()));
             return new JSONObject().put("response", "Failed").toString();
         }
+        */
     }
 
     private Customer getCustomerWithAllFields() {
@@ -134,7 +137,7 @@ public class SlackController {
     
     HttpHeaders getHeaders() {
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.setContentType(MediaType.APPLICATION_JSON);
         return headers;
     }
 }
