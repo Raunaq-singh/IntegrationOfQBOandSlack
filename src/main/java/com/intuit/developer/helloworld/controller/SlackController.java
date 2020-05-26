@@ -59,7 +59,6 @@ public class SlackController {
                     .put("response", "No realm ID.  QBO calls only work if the accounting scope was passed!")
                     .toString();
         }
-        restTemplate.postForObject(responseURL, new HttpEntity<>(gson.toJson(waitingMessageForBot), getHeaders()), waitingMessageForBot.getClass());
         try {
             // get DataService
             final DataService service = helper.getDataService(credentials.getRealmID(), credentials.getAccessToken());
