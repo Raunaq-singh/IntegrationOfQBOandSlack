@@ -10,7 +10,7 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.scheduling.annotation.Async;
+//import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,7 +26,6 @@ public class SlackController {
     CustomerHelper customerHelper;
 
     //private static final Logger logger = Logger.getLogger(SlackController.class);
-    @Async
     @ResponseBody
     @RequestMapping(value = "/slack/events", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String slashCommandResponse(@RequestParam("text") String text, @RequestParam("response_url") String responseURL) {
