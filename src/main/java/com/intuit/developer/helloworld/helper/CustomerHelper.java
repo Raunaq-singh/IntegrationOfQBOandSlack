@@ -65,6 +65,7 @@ public class CustomerHelper {
         restTemplate.postForObject(responseURL, new HttpEntity<>(slackResponse, getHeaders()), String.class);
     }
 
+    @Async
     public String addSingleCustomer(String text){
         try {
             // get DataService
