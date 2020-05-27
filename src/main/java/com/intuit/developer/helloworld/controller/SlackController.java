@@ -26,9 +26,9 @@ public class SlackController {
     CustomerHelper customerHelper;
 
     //private static final Logger logger = Logger.getLogger(SlackController.class);
+    @Async
     @ResponseBody
     @RequestMapping(value = "/slack/events", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    @Async
     public String slashCommandResponse(@RequestParam("text") String text, @RequestParam("response_url") String responseURL) {
         if (StringUtils.isEmpty(credentials.getRealmID())) {
             return new JSONObject()
