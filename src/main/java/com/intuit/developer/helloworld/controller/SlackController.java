@@ -60,59 +60,53 @@ public class SlackController {
     @RequestMapping(value = "/slack/events", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String slashCommandResponse(@RequestParam("text") String text,
             @RequestParam("response_url") String responseURL) {
-        //System.out.println(text);
-        //System.out.println(responseURL);
-        logger.info("+++++++++" + text);
-        logger.info("+++++++++" + responseURL);
         if (StringUtils.isEmpty(credentials.getRealmID())) {
             return new JSONObject()
                     .put("response", "No realm ID.  QBO calls only work if the accounting scope was passed!")
                     .toString();
         }
-        logger.info("+++++++++" + text);
-        logger.info("+++++++++" + responseURL);
         restTemplate.postForEntity(responseURL, new HttpEntity<>(slackResponse, getHeaders()), String.class);
-        logger.info("+++++++++ REACHED HERE");
-        return "Checking";
-        /*
-        try {
-            // get DataService
-            final DataService service = helper.getDataService(credentials.getRealmID(), credentials.getAccessToken());
-
-            // add customer
-            final Customer customer = getCustomerWithAllFields();
-            customer.setDisplayName(text);
-            final Customer savedCustomer = service.add(customer);
-            return createResponse(savedCustomer);
-        } catch (final InvalidTokenException e) {
-            logger.error("Error while calling executeQuery :: " + e.getMessage());
-            // refresh tokens
-            logger.info("received 401 during companyinfo call, refreshing tokens now");
-            OAuth2PlatformClient client = factory.getOAuth2PlatformClient();
-
+        int numberOfCustomersToBeCreated = Integer.parseInt(text);
+        for(int i = 0; i < numberOfCustomersToBeCreated; i++){
             try {
-                BearerTokenResponse bearerTokenResponse = client.refreshToken(credentials.getRefreshToken());
-                credentials.setAccessToken(bearerTokenResponse.getAccessToken());
-                credentials.setRefreshToken(bearerTokenResponse.getRefreshToken());
-		        DataService service = helper.getDataService(credentials.getRealmID(), credentials.getAccessToken());
-				
-				final Customer customer = getCustomerWithAllFields();
-                customer.setDisplayName(text);
-                final Customer savedCustomer = service.add(customer);       
-                return createResponse(savedCustomer);
-			} catch (OAuthException e1) {
-				logger.error("Error while calling bearer token :: " + e.getMessage());
-				return new JSONObject().put("response",failureMsg).toString();
-			} catch (FMSException e1) {
-				logger.error("Error while calling company currency :: " + e.getMessage());
-				return new JSONObject().put("response",failureMsg).toString();
-			}
-        } catch (final FMSException e) {
-            final List<com.intuit.ipp.data.Error> list = e.getErrorList();
-            list.forEach(error -> logger.error("Error while calling the API :: " + error.getMessage()));
-            return new JSONObject().put("response", "Failed").toString();
+                // get DataService
+                final DataService service = helper.getDataService(credentials.getRealmID(), credentials.getAccessToken());
+    
+                // add customer
+                final Customer customer = getCustomerWithAllFields();
+                //customer.setDisplayName(text);
+                final Customer savedCustomer = service.add(customer);
+                //return createResponse(savedCustomer);
+            } catch (final InvalidTokenException e) {
+                logger.error("Error while calling executeQuery :: " + e.getMessage());
+                // refresh tokens
+                logger.info("received 401 during companyinfo call, refreshing tokens now");
+                OAuth2PlatformClient client = factory.getOAuth2PlatformClient();
+    
+                try {
+                    BearerTokenResponse bearerTokenResponse = client.refreshToken(credentials.getRefreshToken());
+                    credentials.setAccessToken(bearerTokenResponse.getAccessToken());
+                    credentials.setRefreshToken(bearerTokenResponse.getRefreshToken());
+                    DataService service = helper.getDataService(credentials.getRealmID(), credentials.getAccessToken());
+                    
+                    final Customer customer = getCustomerWithAllFields();
+                    //customer.setDisplayName(text);
+                    final Customer savedCustomer = service.add(customer);       
+                    return createResponse(savedCustomer);
+                } catch (OAuthException e1) {
+                    logger.error("Error while calling bearer token :: " + e.getMessage());
+                    return new JSONObject().put("response",failureMsg).toString();
+                } catch (FMSException e1) {
+                    logger.error("Error while calling company currency :: " + e.getMessage());
+                    return new JSONObject().put("response",failureMsg).toString();
+                }
+            } catch (final FMSException e) {
+                final List<com.intuit.ipp.data.Error> list = e.getErrorList();
+                list.forEach(error -> logger.error("Error while calling the API :: " + error.getMessage()));
+                return new JSONObject().put("response", "Failed").toString();
+            }
         }
-        */
+        return ("Created " + text + "customers");
     }
 
     private Customer getCustomerWithAllFields() {
