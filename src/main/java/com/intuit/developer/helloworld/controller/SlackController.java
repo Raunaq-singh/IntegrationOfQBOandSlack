@@ -1,17 +1,12 @@
 package com.intuit.developer.helloworld.controller;
 
 import java.util.Arrays;
-import java.util.List;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.intuit.developer.helloworld.classes.SlackResponse;
 import com.intuit.developer.helloworld.classes.SlackResponseAttachment;
 import com.intuit.developer.helloworld.classes.credentialsClass;
-import com.intuit.developer.helloworld.client.OAuth2PlatformClientFactory;
 import com.intuit.developer.helloworld.helper.CustomerHelper;
-import com.intuit.developer.helloworld.helper.QBOServiceHelper;
 
 import org.apache.log4j.Logger;
 import org.apache.commons.lang.StringUtils;
@@ -52,7 +47,7 @@ public class SlackController {
                     .put("response", "No realm ID.  QBO calls only work if the accounting scope was passed!")
                     .toString();
         }
-        restTemplate.postForEntity(responseURL, new HttpEntity<>(slackResponse, getHeaders()), String.class);
+        //restTemplate.postForEntity(responseURL, new HttpEntity<>(slackResponse, getHeaders()), String.class);
         //int numberOfCustomersToBeCreated = Integer.parseInt(text);
         logger.info("In the method!");
         return customerHelper.addCustomer(text);
