@@ -30,6 +30,7 @@ public class SlackController {
     @Autowired
     credentialsClass credentials;
 
+    @Autowired
     CustomerHelper customerHelper;
 
     private static final Logger logger = Logger.getLogger(SlackController.class);
