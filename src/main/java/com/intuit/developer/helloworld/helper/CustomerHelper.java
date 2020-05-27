@@ -11,11 +11,13 @@ import com.intuit.ipp.data.EmailAddress;
 import com.intuit.ipp.exception.FMSException;
 import com.intuit.ipp.exception.InvalidTokenException;
 import com.intuit.ipp.services.DataService;
+import org.apache.commons.lang.StringUtils;
 import com.intuit.oauth2.client.OAuth2PlatformClient;
 import com.intuit.oauth2.data.BearerTokenResponse;
 import com.intuit.oauth2.exception.OAuthException;
 
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
@@ -47,9 +49,20 @@ public class CustomerHelper {
     private static final String failureMsg = "Failed";
     
     @Async
+    public void customerService(String text, String responseURL){
+        int numberOfCustomersToBeCreated = 1;
+        if(NumberUtils.isNumber(text) == true){
+            numberOfCustomersToBeCreated = Integer.parseInt(text);
+            text = RandomStringUtils.randomAlphanumeric(8);
+        }
+        this.addCustomer(responseURL, text, numberOfCustomersToBeCreated);
+        return;
+    }
+
     public void addCustomer(String responseURL, String text, int numberOfCustomersToBeCreated){
         String status = "Zero Customers";
         Boolean check = true;
+        numberOfCustomersToBeCreated = Math.max(100000, numberOfCustomersToBeCreated);
         for(int i = 0; i < numberOfCustomersToBeCreated; i++){
             status = addSingleCustomer(text);
             if(status != ("Customer Created!")){
@@ -61,12 +74,20 @@ public class CustomerHelper {
         if(check){
             status = (numberOfCustomersToBeCreated + " customers created!");
         }
+        if(numberOfCustomersToBeCreated < 0){
+            status = "Invalid number of customers!";
+        } 
         slackResponse.setText(status);
         restTemplate.postForObject(responseURL, new HttpEntity<>(slackResponse, getHeaders()), String.class);
     }
 
     public String addSingleCustomer(String text){
         try {
+            if (StringUtils.isEmpty(credentials.getRealmID())) {
+                return new JSONObject()
+                        .put("response", "No realm ID.  QBO calls only work if the accounting scope was passed!")
+                        .toString();
+            }
             // get DataService
             final DataService service = helper.getDataService(credentials.getRealmID(), credentials.getAccessToken());
             // add customer
