@@ -55,6 +55,8 @@ public class CustomerHelper {
             numberOfCustomersToBeCreated = Integer.parseInt(text);
             text = RandomStringUtils.randomAlphanumeric(8);
         }
+        logger.info("++++++++++++++" + numberOfCustomersToBeCreated);
+        logger.info("++++++++++++++" + text);
         this.addCustomer(responseURL, text, numberOfCustomersToBeCreated);
     }
 
