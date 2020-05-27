@@ -48,7 +48,7 @@ public class CustomerHelper {
     private static final Logger logger = Logger.getLogger(CustomerHelper.class);
     private static final String failureMsg = "Failed";
     
-    @Async
+    //@Async
     public void customerService(String text, String responseURL){
         int numberOfCustomersToBeCreated = 1;
         if(NumberUtils.isNumber(text) == true){
@@ -56,7 +56,6 @@ public class CustomerHelper {
             text = RandomStringUtils.randomAlphanumeric(8);
         }
         this.addCustomer(responseURL, text, numberOfCustomersToBeCreated);
-        return;
     }
 
     public void addCustomer(String responseURL, String text, int numberOfCustomersToBeCreated){
