@@ -69,9 +69,10 @@ public class SlackController {
         }
         logger.info("+++++++++" + text);
         logger.info("+++++++++" + responseURL);
-        restTemplate.postForEntity(responseURL, new HttpEntity<>(slackResponse, getHeaders()), slackResponse.getClass());
+        restTemplate.postForEntity(responseURL, new HttpEntity<>(slackResponse, getHeaders()), String.class);
         logger.info("+++++++++ REACHED HERE");
-        //return "Checking";
+        return "Checking";
+        /*
         try {
             // get DataService
             final DataService service = helper.getDataService(credentials.getRealmID(), credentials.getAccessToken());
@@ -109,6 +110,7 @@ public class SlackController {
             list.forEach(error -> logger.error("Error while calling the API :: " + error.getMessage()));
             return new JSONObject().put("response", "Failed").toString();
         }
+        */
     }
 
     private Customer getCustomerWithAllFields() {
