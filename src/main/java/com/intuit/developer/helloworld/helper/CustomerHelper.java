@@ -57,7 +57,7 @@ public class CustomerHelper {
             text = RandomStringUtils.randomAlphanumeric(8);
         }
         if(check){
-            status = "All customers created!";
+            status = (numberOfCustomersToBeCreated + " customers created!");
         }
         slackResponse.setText(status);
         restTemplate.postForObject(responseURL, new HttpEntity<>(slackResponse, getHeaders()), String.class);
