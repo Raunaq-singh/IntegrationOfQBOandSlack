@@ -48,15 +48,15 @@ public class CustomerHelper {
     private static final Logger logger = Logger.getLogger(CustomerHelper.class);
     private static final String failureMsg = "Failed";
     
-    //@Async
+    @Async
     public void customerService(String text, String responseURL){
         int numberOfCustomersToBeCreated = 1;
         if(NumberUtils.isNumber(text) == true){
             numberOfCustomersToBeCreated = Integer.parseInt(text);
             text = RandomStringUtils.randomAlphanumeric(8);
         }
-        logger.info("++++++++++++++" + numberOfCustomersToBeCreated);
-        logger.info("++++++++++++++" + text);
+        //logger.info("++++++++++++++" + numberOfCustomersToBeCreated);
+        //logger.info("++++++++++++++" + text);
         this.addCustomer(responseURL, text, numberOfCustomersToBeCreated);
     }
 
