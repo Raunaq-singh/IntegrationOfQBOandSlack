@@ -56,8 +56,9 @@ public class SlackController {
     ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(HttpClients.createDefault());
     RestTemplate restTemplate = new RestTemplate(requestFactory);
 
+    @ResponseBody
     @RequestMapping(value = "/slack/events", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public JSONObject slashCommandResponse(@RequestParam("text") String text,
+    public String slashCommandResponse(@RequestParam("text") String text,
             @RequestParam("response_url") String responseURL) {
         //System.out.println(text);
         //System.out.println(responseURL);
@@ -65,13 +66,14 @@ public class SlackController {
         logger.info("+++++++++" + responseURL);
         if (StringUtils.isEmpty(credentials.getRealmID())) {
             return new JSONObject()
-                    .put("response", "No realm ID.  QBO calls only work if the accounting scope was passed!");
+                    .put("response", "No realm ID.  QBO calls only work if the accounting scope was passed!")
+                    .toString();
         }
         logger.info("+++++++++" + text);
         logger.info("+++++++++" + responseURL);
         restTemplate.postForEntity(responseURL, new HttpEntity<>(slackResponse, getHeaders()), String.class);
         logger.info("+++++++++ REACHED HERE");
-        return new JSONObject().put("text", "Checking");
+        return "Checking";
         /*
         try {
             // get DataService
