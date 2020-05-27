@@ -52,7 +52,7 @@ public class SlackController {
                     .put("response", "No realm ID.  QBO calls only work if the accounting scope was passed!")
                     .toString();
         }
-        restTemplate.postForEntity(responseURL, new HttpEntity<>(ResponseEntity.ok("Wait for a while..."), getHeaders()), String.class);
+        restTemplate.postForEntity(responseURL, new HttpEntity<>(gson.toJson(ResponseEntity.ok("Wait for a while...")), getHeaders()), String.class);
         numberOfCustomersToBeCreated = Integer.parseInt(text);
         response_URL = responseURL;
         return "Wait for a while! The customers are being created!";
