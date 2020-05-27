@@ -50,7 +50,9 @@ public class SlackController {
         //restTemplate.postForEntity(responseURL, new HttpEntity<>(slackResponse, getHeaders()), String.class);
         //int numberOfCustomersToBeCreated = Integer.parseInt(text);
         logger.info("In the method!");
-        return customerHelper.addCustomer(text);
+        String status = customerHelper.addCustomer(text);
+        logger.info("STATUS IS " + status);
+        return status;
     }
     
     HttpHeaders getHeaders() {
