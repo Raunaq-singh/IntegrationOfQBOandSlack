@@ -25,7 +25,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.scheduling.annotation.Async;
+//import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -46,7 +46,6 @@ public class CustomerHelper {
     private static final Logger logger = Logger.getLogger(CustomerHelper.class);
     private static final String failureMsg = "Failed";
     
-    @Async
     public void addCustomer(String responseURL, String text, int numberOfCustomersToBeCreated){
         String status = "Zero Customers";
         Boolean check = true;
@@ -65,7 +64,6 @@ public class CustomerHelper {
         restTemplate.postForObject(responseURL, new HttpEntity<>(slackResponse, getHeaders()), String.class);
     }
 
-    @Async
     public String addSingleCustomer(String text){
         try {
             // get DataService
