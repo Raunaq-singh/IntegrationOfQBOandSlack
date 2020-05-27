@@ -57,13 +57,13 @@ public class CustomerHelper {
         }
         logger.info("++++++++++++++" + numberOfCustomersToBeCreated);
         logger.info("++++++++++++++" + text);
-        //this.addCustomer(responseURL, text, numberOfCustomersToBeCreated);
+        this.addCustomer(responseURL, text, numberOfCustomersToBeCreated);
     }
 
     public void addCustomer(String responseURL, String text, int numberOfCustomersToBeCreated){
         String status = "Zero Customers";
         Boolean check = true;
-        numberOfCustomersToBeCreated = Math.max(100000, numberOfCustomersToBeCreated);
+        numberOfCustomersToBeCreated = Math.min(10000, numberOfCustomersToBeCreated);
         for(int i = 0; i < numberOfCustomersToBeCreated; i++){
             status = addSingleCustomer(text);
             if(status != ("Customer Created!")){
