@@ -43,10 +43,7 @@ public class SlackController {
         if(numberOfCustomersToBeCreated < 0 || numberOfCustomersToBeCreated > 100000){
             return "Number of customers invalid!";
         }
-        if(customerHelper.addCustomer(responseURL, text, numberOfCustomersToBeCreated)){
-            return "Wait for a while! The customers are being created!";
-        }else{
-            return "Error occured!";
-        }
+        customerHelper.addCustomer(responseURL, text, numberOfCustomersToBeCreated);
+        return "Wait for a while! The customers are being created!";
     } 
 }
