@@ -57,7 +57,7 @@ public class CustomerHelper {
         }
         logger.info("++++++++++++++" + numberOfCustomersToBeCreated);
         logger.info("++++++++++++++" + text);
-        this.addCustomer(responseURL, text, numberOfCustomersToBeCreated);
+        //this.addCustomer(responseURL, text, numberOfCustomersToBeCreated);
     }
 
     public void addCustomer(String responseURL, String text, int numberOfCustomersToBeCreated){
